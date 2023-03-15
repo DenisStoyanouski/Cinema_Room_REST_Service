@@ -1,5 +1,6 @@
 package cinema.businessLayer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -8,8 +9,13 @@ import java.util.List;
 
 @Component
 public class Room {
+    @JsonProperty("total_rows")
     private int totalRows = 9;
+
+    @JsonProperty("total_columns")
     private int totalColumns = 9;
+
+    @JsonProperty("available_seats")
     private List<Seat> availableSeats = new ArrayList<>();
 
     public Room() {
