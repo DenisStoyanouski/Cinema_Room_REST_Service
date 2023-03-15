@@ -1,6 +1,6 @@
 package cinema.businessLayer;
 
-public class Seat {
+class Seat {
     private int row;
     private int column;
 
