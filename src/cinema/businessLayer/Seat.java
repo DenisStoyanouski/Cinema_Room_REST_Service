@@ -3,10 +3,15 @@ package cinema.businessLayer;
 class Seat {
     private int row;
     private int column;
+    private final int price;
+
+    private boolean isTaken;
 
     public Seat(int row, int column) {
         this.row = row;
         this.column = column;
+        this.price = row <= 4 ? 10 : 8;
+        this.isTaken = false;
     }
 
     public int getRow() {
@@ -23,5 +28,17 @@ class Seat {
 
     public void setColumn(int column) {
         this.column = column;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public boolean isTaken() {
+        return isTaken;
+    }
+
+    public void setTaken(boolean taken) {
+        isTaken = taken;
     }
 }
