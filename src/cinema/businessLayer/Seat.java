@@ -1,5 +1,8 @@
 package cinema.businessLayer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.stereotype.Component;
+
 public class Seat {
     private int row;
     private int column;

@@ -5,8 +5,8 @@ import cinema.businessLayer.Room;
 import cinema.businessLayer.RoomService;
 import cinema.businessLayer.Seat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,8 +22,8 @@ public class RoomController {
         return roomService.getRoom();
     }
 
-    @PostMapping(value = "/purchase", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Object makePurchase(int row, int column) {
+    @PostMapping("/purchase")
+    public Object makePurchase(@PathVariable int row, int column) {
         try {
             Seat seat = roomService.getRoom().getSeatByRowAndColumn(row, column);
             seat.setTaken();
