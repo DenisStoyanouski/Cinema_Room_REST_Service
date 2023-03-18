@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -45,7 +46,13 @@ public class Room {
     }
 
     public List<Seat> getAvailableSeats() {
-        return availableSeats;
+        return availableSeats.stream().filter(seat -> !seat.isTaken()).collect(Collectors.toList());
+    }
+
+    public Seat getSeatByRowAndColumn(int row, int column) {
+        return availableSeats.stream()
+                .filter(seat -> seat.getRow() == row && seat.getColumn() == column)
+                .findFirst().get();
     }
 
     public void setAvailableSeats(List<Seat> availableSeats) {

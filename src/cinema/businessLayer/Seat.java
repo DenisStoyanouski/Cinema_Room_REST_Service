@@ -1,10 +1,9 @@
 package cinema.businessLayer;
 
-class Seat {
+public class Seat {
     private int row;
     private int column;
     private final int price;
-
     private boolean isTaken;
 
     public Seat(int row, int column) {
@@ -38,7 +37,18 @@ class Seat {
         return isTaken;
     }
 
-    public void setTaken(boolean taken) {
-        isTaken = taken;
+    public void setTaken() {
+        isTaken = true;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "row:" + row +
+                ", column:" + column +
+                ", price:" + price +
+                '}';
+    }
+
+
 }
