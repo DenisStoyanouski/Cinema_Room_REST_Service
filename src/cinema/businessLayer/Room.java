@@ -1,5 +1,6 @@
 package cinema.businessLayer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 
@@ -16,17 +17,29 @@ public class Room {
     @JsonProperty("total_columns")
     private int totalColumns = 9;
 
+    @JsonIgnore
+    private List<Seat> seats = new ArrayList<>();
     @JsonProperty("available_seats")
-    private List<Seat> availableSeats = new ArrayList<>();
+    private List<SeatDTO> availableSeats;
+
+
 
     public Room() {
         for (int i = 1; i <= totalRows; i++) {
             for(int j = 1; j <= totalColumns; j++) {
-                availableSeats.add(new Seat(i, j));
+                seats.add(new Seat(i, j));
             }
         };
-    }
+        availableSeats = seats.stream()
+                .filter(seat -> !seat.isTaken())
+                .map(seat -> convertUserToDTO(seat))
+                .collect(Collectors.toList());
 
+    }
+    public SeatDTO convertUserToDTO(Seat seat) {
+        SeatDTO dto = new SeatDTO(seat.getRow(), seat.getColumn(), seat.getPrice());
+        return dto;
+    }
     public int getTotalRows() {
         return totalRows;
     }
@@ -43,17 +56,28 @@ public class Room {
         this.totalColumns = totalColumns;
     }
 
-    public List<Seat> getAvailableSeats() {
-        return availableSeats.stream().filter(seat -> !seat.isTaken()).collect(Collectors.toList());
-    }
 
     public Seat getSeatByRowAndColumn(int row, int column) {
-        return availableSeats.stream()
+        return seats.stream()
                 .filter(seat -> seat.getRow() == row && seat.getColumn() == column)
                 .findFirst().get();
     }
 
-    public void setAvailableSeats(List<Seat> availableSeats) {
-        this.availableSeats = availableSeats;
+    public List<SeatDTO> getAvailableSeats() {
+        return availableSeats;
     }
+
+    public void updateAvailableSeats() {
+        availableSeats = seats.stream()
+                .filter(seat -> !seat.isTaken())
+                .map(this::convertUserToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public SeatDTO getAvailableSeatDTO(int row, int column) {
+        return availableSeats.stream()
+                .filter(seat-> seat.getRow() == row && seat.getColumn() == column)
+                .findFirst().orElseThrow();
+    }
+
 }

@@ -1,11 +1,17 @@
 package cinema.businessLayer;
 
 public class Message {
-    String name;
-    String description;
+    String error;
 
-    public Message(String name, String description) {
-        this.name = name;
-        this.description = description;
+    public Message(String error) {
+        this.error = error;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

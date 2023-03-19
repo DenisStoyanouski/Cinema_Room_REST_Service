@@ -1,14 +1,11 @@
 package cinema.presentation;
 
-import cinema.businessLayer.Message;
-import cinema.businessLayer.Room;
-import cinema.businessLayer.RoomService;
-import cinema.businessLayer.Seat;
+import cinema.businessLayer.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 
@@ -22,16 +19,34 @@ public class RoomController {
         return roomService.getRoom();
     }
 
-    @PostMapping("/purchase")
-    public Object makePurchase(@PathVariable int row, int column) {
+    @PostMapping(path = "/purchase", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity makePurchase(@RequestBody Seat requestSeat) {
         try {
-            Seat seat = roomService.getRoom().getSeatByRowAndColumn(row, column);
-            seat.setTaken();
-            return seat;
-        } catch (IndexOutOfBoundsException e) {
-            return new Message("error", "The number of a row or a column is out of bounds!");
+            int row = requestSeat.getRow();
+            int column = requestSeat.getColumn();
+            if (row < 1 || row > roomService.getRows() || column < 1 || column > roomService.getColumns()) {
+                return ResponseEntity.badRequest().body(new Message("The number of a row or a column is out of bounds!"));
+            }
+            SeatDTO seatDTO = roomService.getSeat(row, column);
+            roomService.takeSeat(requestSeat.getRow(), requestSeat.getColumn());
+            return ResponseEntity.ok(seatDTO);
         } catch (NoSuchElementException e) {
-            return new Message("error", "The ticket has been already purchased!");
+            return ResponseEntity.badRequest().body(new Message("The ticket has been already purchased!"));
         }
+    }
+}
+
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+class TicketPurchased extends RuntimeException {
+    public TicketPurchased(String cause) {
+        super(cause);
+    }
+}
+
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+class NumberOutOfBounds extends RuntimeException {
+    public NumberOutOfBounds(String cause) {
+        super(cause);
     }
 }

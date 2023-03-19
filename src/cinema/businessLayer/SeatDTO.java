@@ -34,4 +34,5 @@ public class SeatDTO {
     public void setPrice(int price) {
         this.price = price;
     }
+
 }

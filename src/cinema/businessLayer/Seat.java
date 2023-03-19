@@ -1,12 +1,9 @@
 package cinema.businessLayer;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.stereotype.Component;
-
 public class Seat {
     private int row;
     private int column;
-    private final int price;
+    private  int price;
     private boolean isTaken;
 
     public Seat(int row, int column) {
@@ -14,6 +11,9 @@ public class Seat {
         this.column = column;
         this.price = row <= 4 ? 10 : 8;
         this.isTaken = false;
+    }
+
+    public Seat() {
     }
 
     public int getRow() {
@@ -41,17 +41,7 @@ public class Seat {
     }
 
     public void setTaken() {
-        isTaken = true;
+        this.isTaken = true;
     }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "row:" + row +
-                ", column:" + column +
-                ", price:" + price +
-                '}';
-    }
-
 
 }
