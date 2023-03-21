@@ -42,8 +42,13 @@ public class RoomController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity returnTicket(@RequestBody Map<String, String> payload) {
-        Map<String, Ticket> upload = Map.of("returned_ticket", roomService.getTicketByToken(payload.get("token")));
-        return ResponseEntity.ok(upload);
+        try {
+            SeatDTO seatDTO = roomService.getTicketByToken(payload.get("token")).getSeatDTO();
+            Map<String, SeatDTO> upload = Map.of("returned_ticket", seatDTO);
+            return ResponseEntity.ok(upload);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.badRequest().body(new Message("Wrong token!"));
+        }
     }
 
 
