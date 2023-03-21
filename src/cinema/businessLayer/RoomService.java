@@ -43,6 +43,10 @@ public class RoomService {
         return room.createTicket(seatDTO);
     }
 
+    public Ticket getTicketByToken(String token) {
+        return room.getTicketByToken(token);
+    }
+
     public boolean isSeatTaken(int row, int column) {
         return room.getSeatByRowAndColumn(row, column).isTaken();
     }

@@ -2,11 +2,13 @@ package cinema.presentation;
 
 import cinema.businessLayer.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -35,6 +37,16 @@ public class RoomController {
             return ResponseEntity.badRequest().body(new Message("The ticket has been already purchased!"));
         }
     }
+
+    @PostMapping(path = "/return",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity returnTicket(@RequestBody Map<String, String> payload) {
+        Map<String, Ticket> upload = Map.of("returned_ticket", roomService.getTicketByToken(payload.get("token")));
+        return ResponseEntity.ok(upload);
+    }
+
+
 }
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
