@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -21,6 +22,9 @@ public class Room {
     private List<Seat> seats = new ArrayList<>();
     @JsonProperty("available_seats")
     private List<SeatDTO> availableSeats;
+
+    @JsonIgnore
+    private final List<Ticket> tickets = new ArrayList<>();
 
 
 
@@ -78,6 +82,16 @@ public class Room {
         return availableSeats.stream()
                 .filter(seat-> seat.getRow() == row && seat.getColumn() == column)
                 .findFirst().orElseThrow();
+    }
+
+    public Ticket createTicket(SeatDTO seatDTO) {
+        Ticket ticket = new Ticket(seatDTO);
+        tickets.add(ticket);
+        return ticket;
+    }
+
+    public Ticket getTicketByToken (String token) {
+        return tickets.stream().filter(ticket -> Objects.equals(token, ticket.getToken())).findFirst().orElseThrow();
     }
 
 }

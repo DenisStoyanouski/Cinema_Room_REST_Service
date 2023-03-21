@@ -39,6 +39,10 @@ public class RoomService {
         room.updateAvailableSeats();
     }
 
+    public Ticket printTicket(SeatDTO seatDTO) {
+        return room.createTicket(seatDTO);
+    }
+
     public boolean isSeatTaken(int row, int column) {
         return room.getSeatByRowAndColumn(row, column).isTaken();
     }

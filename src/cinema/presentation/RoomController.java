@@ -30,7 +30,7 @@ public class RoomController {
             }
             SeatDTO seatDTO = roomService.getSeat(row, column);
             roomService.takeSeat(requestSeat.getRow(), requestSeat.getColumn());
-            return ResponseEntity.ok(seatDTO);
+            return ResponseEntity.ok(roomService.printTicket(seatDTO));
         } catch (NoSuchElementException e) {
             return ResponseEntity.badRequest().body(new Message("The ticket has been already purchased!"));
         }
