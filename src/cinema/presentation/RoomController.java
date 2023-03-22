@@ -43,6 +43,7 @@ public class RoomController {
     public ResponseEntity returnTicket(@RequestBody Map<String, String> payload) {
         try {
             SeatDTO seatDTO = roomService.getTicketByToken(payload.get("token")).getSeatDTO();
+            roomService.returnTicket(payload.get("token"));
             Map<String, SeatDTO> upload = Map.of("returned_ticket", seatDTO);
             return ResponseEntity.ok(upload);
         } catch (NoSuchElementException e) {
@@ -51,33 +52,18 @@ public class RoomController {
     }
 
     @PostMapping(path = "/stats",
-    produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity getStats(@RequestParam String password) {
-        if (!"super_secret".equals(password)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Message("The password is wrong!"));
-        } else {
+    public ResponseEntity getStats(@RequestParam(required = false) String password) {
+        if ("super_secret".equals(password)) {
             LinkedHashMap<String, Integer> stats = new LinkedHashMap<>();
             stats.put("current_income", roomService.getCurrentIncome());
             stats.put("number_of_available_seats", roomService.getAvailableSeats().size());
             stats.put("number_of_purchased_tickets", roomService.getNumberOfPurchasedTickets());
             return ResponseEntity.ok(stats);
         }
-    }
-
-
-}
-
-@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-class TicketPurchased extends RuntimeException {
-    public TicketPurchased(String cause) {
-        super(cause);
+        return ResponseEntity.status(401).body(new Message("The password is wrong!"));
     }
 }
 
-@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-class NumberOutOfBounds extends RuntimeException {
-    public NumberOutOfBounds(String cause) {
-        super(cause);
-    }
-}
+

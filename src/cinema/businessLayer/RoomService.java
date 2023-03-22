@@ -46,6 +46,13 @@ public class RoomService {
         room.updateAvailableSeats();
     }
 
+    public void returnTicket(String token) {
+        Seat seat = room.getSeatByRowAndColumn(getTicketByToken(token).getSeatDTO().getRow(),
+                getTicketByToken(token).getSeatDTO().getColumn());
+        seat.makeAvailable();
+        room.updateAvailableSeats();
+    }
+
     public Ticket printTicket(SeatDTO seatDTO) {
         return room.createTicket(seatDTO);
     }

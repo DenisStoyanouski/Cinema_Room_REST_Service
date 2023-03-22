@@ -44,4 +44,8 @@ public class Seat {
         this.isTaken = true;
     }
 
+    public void makeAvailable() {
+        this.isTaken = false;
+    }
+
 }
