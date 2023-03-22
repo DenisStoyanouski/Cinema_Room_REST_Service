@@ -51,6 +51,21 @@ public class RoomController {
         }
     }
 
+    @PostMapping(path = "/stats",
+    produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity getStats(@RequestParam String password) {
+        if (!"super_secret".equals(password)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Message("The password is wrong!"));
+        } else {
+            Map<String, Integer> stats = Map.of(
+                    "current_income", 1,
+                    "number_of_available_seats", 2,
+                    "number_of_purchased_tickets", 3);
+            return ResponseEntity.ok(stats);
+        }
+    }
+
 
 }
 
