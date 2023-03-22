@@ -8,8 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RestController
 public class RoomController {
@@ -58,10 +57,10 @@ public class RoomController {
         if (!"super_secret".equals(password)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new Message("The password is wrong!"));
         } else {
-            Map<String, Integer> stats = Map.of(
-                    "current_income", 1,
-                    "number_of_available_seats", 2,
-                    "number_of_purchased_tickets", 3);
+            LinkedHashMap<String, Integer> stats = new LinkedHashMap<>();
+            stats.put("current_income", roomService.getCurrentIncome());
+            stats.put("number_of_available_seats", roomService.getAvailableSeats().size());
+            stats.put("number_of_purchased_tickets", roomService.getNumberOfPurchasedTickets());
             return ResponseEntity.ok(stats);
         }
     }

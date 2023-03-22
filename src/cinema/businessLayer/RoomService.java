@@ -33,6 +33,14 @@ public class RoomService {
         return room.getAvailableSeats();
     }
 
+    public int getCurrentIncome() {
+        return room.getSeats().stream().filter(Seat::isTaken).mapToInt(Seat::getPrice).sum();
+    }
+
+    public int getNumberOfPurchasedTickets() {
+        return room.getSeats().size() - room.getAvailableSeats().size();
+    }
+
     public void takeSeat(int row, int column) {
         room.getSeatByRowAndColumn(row, column).setTaken();
         room.updateAvailableSeats();

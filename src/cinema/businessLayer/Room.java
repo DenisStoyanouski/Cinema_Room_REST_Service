@@ -60,6 +60,10 @@ public class Room {
         this.totalColumns = totalColumns;
     }
 
+    public List<Seat> getSeats() {
+        return seats;
+    }
+
 
     public Seat getSeatByRowAndColumn(int row, int column) {
         return seats.stream()
