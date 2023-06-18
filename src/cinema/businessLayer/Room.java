@@ -27,23 +27,24 @@ public class Room {
     private final List<Ticket> tickets = new ArrayList<>();
 
 
-
     public Room() {
         for (int i = 1; i <= totalRows; i++) {
-            for(int j = 1; j <= totalColumns; j++) {
+            for (int j = 1; j <= totalColumns; j++) {
                 seats.add(new Seat(i, j));
             }
-        };
+        }
         availableSeats = seats.stream()
                 .filter(seat -> !seat.isTaken())
-                .map(seat -> convertUserToDTO(seat))
+                .map(this::convertUserToDTO)
                 .collect(Collectors.toList());
 
     }
+
     public SeatDTO convertUserToDTO(Seat seat) {
         SeatDTO dto = new SeatDTO(seat.getRow(), seat.getColumn(), seat.getPrice());
         return dto;
     }
+
     public int getTotalRows() {
         return totalRows;
     }
@@ -84,7 +85,7 @@ public class Room {
 
     public SeatDTO getAvailableSeatDTO(int row, int column) {
         return availableSeats.stream()
-                .filter(seat-> seat.getRow() == row && seat.getColumn() == column)
+                .filter(seat -> seat.getRow() == row && seat.getColumn() == column)
                 .findFirst().orElseThrow();
     }
 
@@ -94,7 +95,7 @@ public class Room {
         return ticket;
     }
 
-    public Ticket getTicketByToken (String token) {
+    public Ticket getTicketByToken(String token) {
         return tickets.stream().filter(ticket -> Objects.equals(token, ticket.getToken())).findFirst().orElseThrow();
     }
 

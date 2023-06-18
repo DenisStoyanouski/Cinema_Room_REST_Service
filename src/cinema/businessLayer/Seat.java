@@ -3,7 +3,7 @@ package cinema.businessLayer;
 public class Seat {
     private int row;
     private int column;
-    private  int price;
+    private int price;
     private boolean isTaken;
 
     public Seat(int row, int column) {
