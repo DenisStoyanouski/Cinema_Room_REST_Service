@@ -1,6 +1,7 @@
 package cinema.presentation;
 
 import cinema.businessLayer.*;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class RoomController {
 
     @PostMapping(path = "/purchase", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity makePurchase(@RequestBody Seat requestSeat) {
+    public ResponseEntity makePurchase(@Valid @RequestBody Seat requestSeat) {
         try {
             int row = requestSeat.getRow();
             int column = requestSeat.getColumn();

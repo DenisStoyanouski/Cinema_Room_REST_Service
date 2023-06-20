@@ -1,7 +1,14 @@
 package cinema.businessLayer;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+
 public class Seat {
+    @Min(1)
+    @Max(9)
     private int row;
+    @Min(1)
+    @Max(9)
     private int column;
     private int price;
     private boolean isTaken;
